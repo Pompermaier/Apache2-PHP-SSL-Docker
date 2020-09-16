@@ -8,7 +8,7 @@ Run the container via:
 
 ```
 docker run --rm \
-    -v ${DOCUMENT_ROOT}:/var/www/ \
+    -v ${DOCUMENT_ROOT}:/var/www/app \
     -v ${SITES_ENABLED}:/etc/apache2/sites-enabled \
     -p 80:80 \
     -p 443:443 \
@@ -33,13 +33,13 @@ Each `.conf` in `${SITES_ENABLED}` should follow the template:
 <VirtualHost *:80>
     ServerName example.com
     ServerAlias example.com
-    DocumentRoot /var/www/
+    DocumentRoot /var/www/app
 </VirtualHost>
 
 <VirtualHost *:443>
     ServerName example.com
     ServerAlias example.com
-    DocumentRoot /var/www/
+    DocumentRoot /var/www/app
 
     SSLCertificateFile /etc/letsencrypt/live/example.com/fullchain.pem
     SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
