@@ -8,6 +8,7 @@ Run the container via:
 
 ```
 docker run --rm \
+    --restart always \
     -v ${DOCUMENT_ROOT}:/var/www/app \
     -v ${SITES_ENABLED}:/etc/apache2/sites-enabled \
     -p 80:80 \
@@ -15,7 +16,7 @@ docker run --rm \
     -e "DOMAINS=" \
     -e "WEBMASTER_MAIL=" \
     --name httpd-php-ssl \
-    matchstic/httpd-php-ssl:latest
+    httpd-php-ssl:latest
 ```
 
 ### Configuration
