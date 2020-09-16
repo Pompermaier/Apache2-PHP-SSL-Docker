@@ -1,11 +1,11 @@
-FROM ubuntu:xenial
-MAINTAINER Matt Clarke <matt@incendo.ws>
+FROM ubuntu:bionic
+MAINTAINER Pompermaier <pompermaier@msn.com>
 
 # Modified from: https://github.com/romeOz/docker-apache-php
 # Additions from: https://github.com/BirgerK/docker-apache-letsencrypt
 # Added support for Let's Encrypt SSL certificates
 
-ENV OS_LOCALE="en_US.UTF-8"
+ENV OS_LOCALE="pt_BR.UTF-8"
 RUN apt-get update && apt-get install -y locales && locale-gen ${OS_LOCALE}
 ENV LANG=${OS_LOCALE} \
     LANGUAGE=${OS_LOCALE} \
@@ -13,7 +13,7 @@ ENV LANG=${OS_LOCALE} \
     DEBIAN_FRONTEND=noninteractive
 
 ENV APACHE_CONF_DIR=/etc/apache2 \
-    PHP_CONF_DIR=/etc/php/7.2 \
+    PHP_CONF_DIR=/etc/php/7.3 \
     PHP_DATA_DIR=/var/lib/php
 
 # For Let's Encrypt
@@ -29,13 +29,13 @@ RUN	\
 	&& add-apt-repository -y ppa:ondrej/php \
 	&& add-apt-repository -y ppa:ondrej/apache2 \
 	&& apt-get update \
-    && apt-get install -y curl apache2 libapache2-mod-php7.2 php7.2-cli php7.2-readline php7.2-mbstring php7.2-zip php7.2-intl php7.2-xml php7.2-json php7.2-curl php7.2-gd php7.2-pgsql php7.2-mysql php-pear \
+    && apt-get install -y curl apache2 libapache2-mod-php7.3 php7.3-cli php7.3-readline php7.3-mbstring php7.3-zip php7.3-intl php7.3-xml php7.3-json php7.3-curl php7.3-gd php7.3-pgsql php7.3-mysql php-pear \
     # Apache settings
     && cp /dev/null ${APACHE_CONF_DIR}/conf-available/other-vhosts-access-log.conf \
     && rm ${APACHE_CONF_DIR}/sites-enabled/000-default.conf ${APACHE_CONF_DIR}/sites-available/000-default.conf \
-    && a2enmod rewrite php7.2 ssl \
+    && a2enmod rewrite php7.3 ssl \
 	# Install composer
-	&& curl -sS https://getcomposer.org/installer | php -- --version=1.6.4 --install-dir=/usr/local/bin --filename=composer \
+	&& curl -sS https://getcomposer.org/installer | php -- --version=1.10.13 --install-dir=/usr/local/bin --filename=composer \
 	# Forward request and error logs to docker log collector
 	&& ln -sf /dev/stdout /var/log/apache2/access.log \
 	&& ln -sf /dev/stderr /var/log/apache2/error.log \
@@ -65,9 +65,9 @@ COPY entrypoint.sh /sbin/entrypoint.sh
 RUN chmod 755 /sbin/entrypoint.sh
 
 # Set volumes etc
-WORKDIR /var/www/
+WORKDIR /var/www/app/
 EXPOSE 80 443
-VOLUME ["/etc/apache2/sites-available", "/var/www" ]
+VOLUME ["/etc/apache2/sites-available", "/var/www/app/" ]
 
 # Start all components
 CMD ["/sbin/entrypoint.sh"]
